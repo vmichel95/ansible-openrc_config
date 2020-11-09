@@ -1,5 +1,13 @@
 ---
 # tasks file for openrc_config
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+
+- name: Print the package facts
+  debug:
+    var: ansible_facts.packages
+
 - name: template {{ openrc_config_global_configuration }}
   block:
     - name: write insertafter value
