@@ -1,6 +1,18 @@
 ---
 # tasks file for openrc_config
-- name: Gather the package facts
+- name: resolve platform specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
+
+- name: collect package facts
+  when: ansible_facts['os_family'] not in openrc_init_system_os
   package_facts:
     manager: auto
 
@@ -8,20 +20,6 @@
   debug:
     var: ansible_facts.packages
 
-- name: template {{ openrc_config_global_configuration }}
-  block:
-    - name: write insertafter value
-      lineinfile:
-        path: '{{ openrc_config_global_configuration }}'
-        regexp: '^{{ item.key }}='
-        insertafter: '#{{ item.key }}'
-        line: '{{ item.key }}={{ item.value | to_json }}'
-      with_items: '{{ openrc_config_global_settings.insertafter | combine(openrc_config_misc_settings) | rejectattr("value", "eq", "") | list }}'
-    - name: write insertbefore value
-      lineinfile:
-        path: '{{ openrc_config_global_configuration }}'
-        regexp: '^{{ item.key }}='
-        firstmatch: yes
-        insertbefore: '^# If {{ item.key }}'
-        line: '{{ item.key }}={{ item.value | to_json }}'
-      with_items: '{{ openrc_config_global_settings.insertbefore | rejectattr("value", "eq", "") | list }}'
+- name: configure OpenRC (mode= {{ openrc_config_config_type }})
+  when: (ansible_facts['os_family'] in openrc_init_system_os) || (openrc_config_os_manager_package in ansible_facts.packages)
+  include_tasks: '{{ openrc_config_config_type }}.yml'

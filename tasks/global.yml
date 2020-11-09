@@ -1,0 +1,18 @@
+---
+- name: template {{ openrc_config_global_configuration }}
+  block:
+    - name: write insertafter value
+      lineinfile:
+        path: '{{ openrc_config_global_configuration }}'
+        regexp: '^{{ item.key }}='
+        insertafter: '#{{ item.key }}'
+        line: '{{ item.key }}={{ item.value | to_json }}'
+      with_items: '{{ openrc_config_global_settings.insertafter | combine(openrc_config_misc_settings) | rejectattr("value", "eq", "") | list }}'
+    - name: write insertbefore value
+      lineinfile:
+        path: '{{ openrc_config_global_configuration }}'
+        regexp: '^{{ item.key }}='
+        firstmatch: yes
+        insertbefore: '^# If {{ item.key }}'
+        line: '{{ item.key }}={{ item.value | to_json }}'
+      with_items: '{{ openrc_config_global_settings.insertbefore | rejectattr("value", "eq", "") | list }}'

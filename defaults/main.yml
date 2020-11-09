@@ -1,8 +1,15 @@
 ---
 # defaults file for openrc_config
+openrc_config_os_init_system:
+  - Alpine
+  - Gentoo
+
+openrc_config_os_manager_package: openrc
+
 openrc_config_config_type: global
 
 openrc_config_global_configuration: /etc/rc.conf
+
 # Global OpenRC Configuration Settings
 openrc_config_init_services_parallel: False
 openrc_config_interactive_boot: False
