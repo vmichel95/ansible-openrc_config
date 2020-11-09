@@ -12,7 +12,7 @@
         - '{{ role_path }}/vars'
 
 - name: collect package facts
-  when: ansible_facts['os_family'] not in openrc_init_system_os
+  when: ansible_facts['os_family'] not in openrc_config_os_init_system
   package_facts:
     manager: auto
 
@@ -21,5 +21,5 @@
     var: ansible_facts.packages
 
 - name: configure OpenRC (mode= {{ openrc_config_config_type }})
-  when: (ansible_facts['os_family'] in openrc_init_system_os) || (openrc_config_os_manager_package in ansible_facts.packages)
+  when: (ansible_facts['os_family'] in openrc_config_os_init_system) || (openrc_config_os_manager_package in ansible_facts.packages)
   include_tasks: '{{ openrc_config_config_type }}.yml'
