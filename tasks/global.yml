@@ -1,4 +1,8 @@
 ---
+- name: debug insert after
+  debug:
+    var: '{{ openrc_config_global_settings.insertafter | combine(openrc_config_misc_settings, list_merge="append") | list }}'
+
 - name: template {{ openrc_config_global_configuration }}
   block:
     - name: write insertafter value
@@ -7,7 +11,7 @@
         regexp: '^{{ item.key }}='
         insertafter: '#{{ item.key }}'
         line: '{{ item.key }}={{ item.value | to_json }}'
-      with_items: '{{ openrc_config_global_settings.insertafter | combine(openrc_config_misc_settings) | rejectattr("value", "eq", "") | list }}'
+      with_items: '{{ openrc_config_global_settings.insertafter | combine(openrc_config_misc_settings, list_merge="append") | rejectattr("value", "eq", "") | list }}'
     - name: write insertbefore value
       lineinfile:
         path: '{{ openrc_config_global_configuration }}'
