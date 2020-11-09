@@ -1,0 +1,55 @@
+---
+# defaults file for openrc_config
+openrc_config_config_type: global
+
+openrc_config_global_configuration: /etc/rc.conf
+# Global OpenRC Configuration Settings
+openrc_config_init_services_parallel: False
+openrc_config_interactive_boot: False
+openrc_config_shell: /bin/sh
+openrc_config_depend_strict: True
+openrc_config_hotplug: ''
+openrc_config_log_init: False
+openrc_config_log_path: /var/log/rc.log
+openrc_config_log_verbose: False
+openrc_config_env_passthru: False
+openrc_config_env_allow: []
+openrc_config_daemon_start_wait: 100
+openrc_config_runlevel_change_nostop: []
+openrc_config_crashed_start: True
+openrc_config_crashed_stop: False
+openrc_config_display_nocolor: False
+# Misc Configuration Variables
+openrc_config_unicode_support: False
+openrc_config_fuser_timeout: 60
+openrc_config_additional_fstypes: []
+# Service Configuration Variables
+# openrc_config_start_stop_daemon:
+  # nicelevel: '-19'
+  # ionicelevel: '2:2'
+openrc_config_service:
+  config: ''
+  need: []
+  use: ''
+  after: ''
+  before: ''
+  provide: ''
+
+
+openrc_default_fstypes:
+  - afs
+  - ceph 
+  - cifs 
+  - coda
+  - davfs
+  - fuse
+  - fuse.sshfs
+  - gfs
+  - glusterfs
+  - lustre
+  - ncpfs
+  - nfs
+  - nfs4
+  - ocfs2
+  - shfs
+  - smbfs

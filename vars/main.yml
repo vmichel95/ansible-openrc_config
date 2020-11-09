@@ -1,0 +1,43 @@
+---
+# vars file for openrc_config
+openrc_config_global_settings:
+  insertafter:
+    - key: rc_parallel
+      value: '{{ openrc_config_init_services_parallel | ternary("YES", "NO") }}'
+    - key: rc_interactive
+      value: '{{ openrc_config_interactive_boot | ternary("YES", "NO") }}'
+    - key: rc_shell
+      value: '{{ openrc_config_shell }}'
+    - key: rc_depend_strict
+      value: '{{ openrc_config_depend_strict | ternary("YES", "NO") }}'
+    - key: rc_logger
+      value: '{{ openrc_config_log_init | ternary("YES", "NO") }}'
+    - key: rc_log_path
+      value: '{{ openrc_config_log_path }}'
+    - key: rc_verbose
+      value: '{{ openrc_config_log_verbose | ternary("YES", "NO") }}'
+    - key: rc_env_allow
+      value: '{% if openrc_config_env_passthru %}*{% else %}{{ openrc_config_env_allow | join(" ") }}{% endif %}'
+    - key: rc_start_wait
+      value: '{{ openrc_config_daemon_start_wait }}'
+    - key: rc_nostop
+      value: '{{ openrc_config_runlevel_change_nostop | join(" ") }}'
+    - key: rc_crashed_start
+      value: '{{ openrc_config_crashed_start | ternary("YES", "NO")  }}'
+    - key: rc_crashed_stop
+      value: '{{ openrc_config_crashed_stop | ternary("YES", "NO") }}'
+    - key: rc_nocolor
+      value: '{{ openrc_config_display_nocolor | ternary("YES", "NO") }}'
+  insertbefore:
+    - key: rc_hotplug
+      value: '{{ openrc_config_hotplug }}'
+
+openrc_config_misc_settings:
+  - key: unicode
+    value: '{{ openrc_config_unicode_support | ternary("YES", "NO") }}'
+  - key: rc_fuser_timeout
+    value: '{{ openrc_config_fuser_timeout }}'
+  - key: extra_net_fs_list
+    value: '{{ openrc_config_additional_fstypes | difference(openrc_default_fstypes) | join(" ") }}'
+
+openrc_config_service_settings:
